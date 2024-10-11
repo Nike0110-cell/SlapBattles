@@ -1,8 +1,3 @@
-local gameId = game.PlaceId
-
-setclipboard(tostring(gameId))
-
-
 --- Orion
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 local Window = OrionLib:MakeWindow({Name = "My SB GUI", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
