@@ -861,11 +861,16 @@ local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
 })
 
 One:AddButton({
-	Name = "Get Kinetic",
+	Name = "Get Glove Kinetic",
 	Callback = function()
-if game.Players.LocalPlayer.leaderstats.Glove.Value == "Lure" and game.Players.LocalPlayer.Character:FindFirstChild("entered") then
+if game.Players.LocalPlayer.leaderstats.Glove.Value == "Stun" and game.Players.LocalPlayer.Character:FindFirstChild("entered") then
 OGL = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-
+for i = 1,150 do
+game.ReplicatedStorage.SelfKnockback:FireServer({["Force"] = 0,["Direction"] = Vector3.new(0,0.01,0)})
+wait(0.05)
+end
+wait(1.5)
+repeat
 local players = game.Players:GetChildren()
 local RandomPlayer = players[math.random(1, #players)]
 repeat RandomPlayer = players[math.random(1, #players)] until RandomPlayer ~= game.Players.LocalPlayer and RandomPlayer.Character:FindFirstChild("entered") and RandomPlayer.Character:FindFirstChild("rock") == nil and RandomPlayer.Character.Head:FindFirstChild("UnoReverseCard") == nil and RandomPlayer.Character.Humanoid.Health ~= 0
@@ -875,6 +880,13 @@ wait(0.25)
 game.ReplicatedStorage.StunR:FireServer(game.Players.LocalPlayer.Character.Stun)
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = OGL
 wait(0.5)
+if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("EMPStunBadgeCounter") then
+OrionLib:MakeNotification({Name = "Error",Content = "Counter Stun [ "..game.Players.LocalPlayer.Character.EMPStunBadgeCounter.Value.." ]",Image = "rbxassetid://7733658504",Time = 5})
+end
+wait(12.3)
+until game.Players.LocalPlayer.Character:FindFirstChild("EMPStunBadgeCounter") and game.Players.LocalPlayer.Character.EMPStunBadgeCounter.Value >= 50
+else
+OrionLib:MakeNotification({Name = "Error",Content = "You don't have Stun equipped, or you aren't in the arena",Image = "rbxassetid://7733658504",Time = 5})
 end
   	end 
 })
@@ -1125,6 +1137,70 @@ Two:AddButton({
 })
 
 
+FullKinetic = Two:AddToggle({
+	Name = "Auto Full Kinetic",
+	Default = false,
+	Callback = function(Value)
+FullKineticSpam = Value
+if game.Players.LocalPlayer.leaderstats.Glove.Value == "Kinetic" and game.Players.LocalPlayer.Character:FindFirstChild("entered") then
+while FullKineticSpam and game.Players.LocalPlayer.leaderstats.Glove.Value == "Kinetic" do
+game.ReplicatedStorage.SelfKnockback:FireServer({["Force"] = 0,["Direction"] = Vector3.new(0,0.01,0)})
+task.wait()
+end
+elseif Value == true then
+OrionLib:MakeNotification({Name = "Error",Content = "You don't have Kinetic equipped.",Image = "rbxassetid://7733658504",Time = 5})
+wait(0.05)
+FullKinetic:Set(false)
+end
+	end    
+})
+
+Two:AddButton({
+    Name = "Kinetic Troll", 
+    Callback = function()
+        if game.Players.LocalPlayer.leaderstats.Glove.Value == "Kinetic" and game.Players.LocalPlayer.Character:FindFirstChild("entered") then
+            local startTime = tick() -- Record the start time
+            while game.Players.LocalPlayer.leaderstats.Glove.Value == "Kinetic" do
+                -- Check if 3 seconds have passed
+                if tick() - startTime >= 5 then
+                    break
+                end
+                game.ReplicatedStorage.SelfKnockback:FireServer({
+                    ["Force"] = 0,
+                    ["Direction"] = Vector3.new(0, 0.01, 0)
+                })
+                task.wait()
+            end
+            
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-15, -64, 19)
+		    wait()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-15, -64, 19)
+			wait()
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-15, -64, 19)
+			wait()
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-15, -64, 19)
+		    wait()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-15, -64, 19)
+			wait()
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-15, -64, 19)
+			wait()
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-15, -64, 19)
+		    wait()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-15, -64, 19)
+			wait()
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-15, -64, 19)
+			wait()
+        else
+            OrionLib:MakeNotification({
+                Name = "Error",
+                Content = "You don't have Kinetic equipped or aren't in the arena.",
+                Image = "rbxassetid://7733658504",
+                Time = 5
+            })
+        end
+    end    
+})
+
 
 local Four = Window:MakeTab({
 	Name = "Teleports",
@@ -1225,6 +1301,18 @@ Four:AddDropdown({
 	end
 })
 
+Four:AddButton({
+	Name = "Safe spot",
+	Callback = function()
+        local platform = Instance.new("Part")
+        platform.Anchored = true
+        platform.Size = Vector3.new(1000, 10, 1000)
+        platform.CFrame = CFrame.new(-4144, 3895, -12433)
+        platform.BrickColor = BrickColor.new("Red")
+        platform.Parent = game:GetService("Workspace")
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-4144, 3915, -12433)
+  	end    
+})
 
 
 
