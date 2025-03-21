@@ -1,5 +1,5 @@
 --- Orion
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 local Window = OrionLib:MakeWindow({
 	Name = "My SB GUI",
 	HidePremium = false,
@@ -841,74 +841,15 @@ One:AddButton({
 	end    
 })
 
-One:AddButton({
-	Name = "Get Untitled Tag Glove",
-	Callback = function()
-        game:GetService('TeleportService'):Teleport(115782629143468, LocalPlayer)
-		local teleportFunc = queueonteleport or queue_on_teleport
-		if teleportFunc then
-			teleportFunc([[
-if not game:IsLoaded() then
-game.Loaded:Wait()
-end
-repeat wait() until game.Players.LocalPlayer
-local rootPart = game.Players.LocalPlayer.Character.HumanoidRootPart
-		rootPart.CFrame = CFrame.new(-1, 195, 31)
-
-]])
-		end
-	end
-})
 
 One:AddButton({
-	Name = "Get Glove Kinetic",
+	Name = "Get Untitled",
 	Callback = function()
-if game.Players.LocalPlayer.leaderstats.Glove.Value == "Stun" and game.Players.LocalPlayer.Character:FindFirstChild("entered") then
-OGL = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-for i = 1,150 do
-game.ReplicatedStorage.SelfKnockback:FireServer({["Force"] = 0,["Direction"] = Vector3.new(0,0.01,0)})
-wait(0.05)
-end
-wait(1.5)
-repeat
-local players = game.Players:GetChildren()
-local RandomPlayer = players[math.random(1, #players)]
-repeat RandomPlayer = players[math.random(1, #players)] until RandomPlayer ~= game.Players.LocalPlayer and RandomPlayer.Character:FindFirstChild("entered") and RandomPlayer.Character:FindFirstChild("rock") == nil and RandomPlayer.Character.Head:FindFirstChild("UnoReverseCard") == nil and RandomPlayer.Character.Humanoid.Health ~= 0
-Target = RandomPlayer
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Target.Character.HumanoidRootPart.CFrame * CFrame.new(0,-20,0)
-wait(0.25)
-game.ReplicatedStorage.StunR:FireServer(game.Players.LocalPlayer.Character.Stun)
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = OGL
-wait(0.5)
-if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("EMPStunBadgeCounter") then
-OrionLib:MakeNotification({Name = "Error",Content = "Counter Stun [ "..game.Players.LocalPlayer.Character.EMPStunBadgeCounter.Value.." ]",Image = "rbxassetid://7733658504",Time = 5})
-end
-wait(12.3)
-until game.Players.LocalPlayer.Character:FindFirstChild("EMPStunBadgeCounter") and game.Players.LocalPlayer.Character.EMPStunBadgeCounter.Value >= 50
-else
-OrionLib:MakeNotification({Name = "Error",Content = "You don't have Stun equipped, or you aren't in the arena",Image = "rbxassetid://7733658504",Time = 5})
-end
-  	end 
+		game:GetService('TeleportService'):Teleport(115782629143468, LocalPlayer)
+		
+	end    
 })
 
-One:AddButton({
-	Name = "Get Admin",
-	Callback = function()
-        game.ReplicatedStorage.Assets.Retro.Parent = game.Workspace
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.Retro.Map.RetroObbyMap.Spawn_stage2.CFrame
-        wait()
-        OrionLib:MakeNotification({Name = "Press button",Content = "After pressing execute again",Image = "rbxassetid://7733658504",Time = 10})
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-16976, 798, 4909)
-        OrionLib:MakeNotification({Name = "Press Staff Application",Content = "If your on the place, press Staff Application",Image = "rbxassetid://7733658504",Time = 10})
-    end
-})
-
-One:AddButton({
-	Name = "Staff Application (Do Get Admin first)",
-	Callback = function()
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =  CFrame.new(500, 80, 40)
-  	end    
-})
 
 local Two = Window:MakeTab({
 	Name = "Misc",
@@ -980,37 +921,57 @@ Two:AddToggle({
 	Name = "Trap Esp",
 	Default = false,
 	Callback = function(Value)
-		getgenv().TrapEsp =  Value
-		while getgenv().TrapEsp do
-			local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
- 
--- config
-ESP.Players = false
-ESP.Boxes = true
-ESP.Names = true
-ESP:Toggle(true)
- 
--- object
-ESP:AddObjectListener(workspace.BearTrap, { -- Object Path, For example: Workspace.ThisFolder
-    Name = "Hitbox", --Object name inside of the path, for example: Workspace.ThisFolder.Item_1
-    CustomName = "Trap", -- Name you want to be displayed
-    Color = Color3.fromRGB(0, 0, 0), -- Color
-    IsEnabled = "whatever" -- Any name, has to be the same as the last line: ESP.TheNameYouWant
-})
-ESP.whatever = true
-		end
-	end    
+		getgenv().TrapEsp = Value
+        
+        -- Start a coroutine to handle the ESP logic
+		spawn(function()
+			while getgenv().TrapEsp do
+                -- Loop through all objects in the workspace to find all "HitBox" parts
+				for _, obj in pairs(workspace:GetChildren()) do
+					if obj:IsA("Model") and obj:FindFirstChild("HitBox") then
+						local hitBox = obj:FindFirstChild("HitBox")
+                        
+                        -- Create the ESP only if it doesn't already exist
+						if hitBox and not hitBox:FindFirstChild("TrapEsp") then
+							local trapEsp = Instance.new("BillboardGui", hitBox)
+							trapEsp.Adornee = hitBox
+							trapEsp.Name = "TrapEsp"
+							trapEsp.Size = UDim2.new(0, 100, 0, 150)
+							trapEsp.StudsOffset = Vector3.new(0, 1, 0)
+							trapEsp.AlwaysOnTop = true
+							local trapEspText = Instance.new("TextLabel", trapEsp)
+							trapEspText.BackgroundTransparency = 1
+							trapEspText.Size = UDim2.new(0, 100, 0, 100)
+							trapEspText.TextSize = 25
+							trapEspText.Font = Enum.Font.SourceSansSemibold
+							trapEspText.TextStrokeTransparency = 0
+							trapEspText.Text = "Trap"
+							trapEspText.TextColor3 = Color3.new(1, 0, 0) -- Red color for traps
+						end
+					end
+				end
+				task.wait() -- Small delay for loop efficiency
+			end
+
+            -- Remove the ESP instance when the toggle is turned off
+			if not getgenv().TrapEsp then
+                -- Loop through all objects in the workspace to remove "TrapEsp" from all HitBoxes
+				for _, obj in pairs(workspace:GetChildren()) do
+					if obj:IsA("Model") and obj:FindFirstChild("HitBox") then
+						local hitBox = obj:FindFirstChild("HitBox")
+						if hitBox then
+							local trapEsp = hitBox:FindFirstChild("TrapEsp")
+							if trapEsp then
+								trapEsp:Destroy()
+							end
+						end
+					end
+				end
+			end
+		end)
+	end 
 })
 
-Two:AddToggle({
-	Name = "Jebaited Esp",
-	Default = false,
-	Callback = function(Value)
-		getgenv().JebaitedEsp =  Value
-		while getgenv().JebaitedEsp do
-		end
-	end    
-})
 
 Two:AddSlider({
 	Name = "Reach HitBox",
@@ -1050,6 +1011,22 @@ Two:AddToggle({
 	end    
 })
 
+Two:AddToggle({
+	Name = "Anti Squid",
+	Default = false,
+	Callback = function(Value)
+		_G.AntiSquid = Value
+		if _G.AntiSquid == false then
+			game.Players.LocalPlayer.PlayerGui.SquidInk.Enabled = true
+		end
+		while _G.AntiSquid do
+			if game.Players.LocalPlayer.PlayerGui:FindFirstChild("SquidInk") then
+				game.Players.LocalPlayer.PlayerGui.SquidInk.Enabled = false
+			end
+			task.wait()
+		end
+	end    
+})
 
 Two:AddToggle({
 	Name = "Remove Name Tag",
@@ -1136,7 +1113,6 @@ Two:AddButton({
 
 })
 
-
 FullKinetic = Two:AddToggle({
 	Name = "Auto Full Kinetic",
 	Default = false,
@@ -1201,6 +1177,162 @@ Two:AddButton({
     end    
 })
 
+Two:AddLabel("Masteries (Helper - For all)")
+
+Two:AddToggle({
+	Name = "Brick",
+	Default = false,
+	Callback = function(Value)
+		getgenv().Money = Value
+            while getgenv().Money do
+                local Money = game:GetService("Workspace").Union
+                local Feet = game.Players.LocalPlayer.Character.HumanoidRootPart
+
+                Money.CFrame = Feet.CFrame
+                task.wait()
+            end
+	end    
+})
+
+Two:AddToggle({
+	Name = "Fort (Use ZZZ)",
+	Default = false,
+	Callback = function(Value)
+		_G.Fort = Value
+		while _G.Fort do
+			for i, v in pairs(game.Workspace:GetChildren()) do
+				if v.Name == "Part" then
+					firetouchinterest(game.Players.LocalPlayer.Character:WaitForChild("Head"), v, 0)
+					firetouchinterest(game.Players.LocalPlayer.Character:WaitForChild("Head"), v, 1)
+				end
+			end
+			task.wait()
+		end
+	end
+})
+
+Two:AddToggle({
+    Name = "Engineer",
+    Default = false,
+    Callback = function(Value)
+        getgenv().Fort = Value
+
+        while getgenv().Fort do
+            local Glove = game:GetService("Workspace"):FindFirstChild("Turret") 
+                        and game:GetService("Workspace").Turret:FindFirstChild("HingePart") 
+                        and game:GetService("Workspace").Turret.HingePart:FindFirstChild("Glove")
+
+            local Feet = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+            if Glove and Feet then
+                -- Vibrate the Glove near the player and activate TouchInterest
+                for i = 1, 5 do
+                    Glove.CFrame = Feet.CFrame * CFrame.new(math.random(-1,1), math.random(-1,1), math.random(-1,1))
+
+                    -- Simulate touch interaction
+                    firetouchinterest(Feet, Glove, 0) -- Start touch
+                    task.wait(0.05)
+                    firetouchinterest(Feet, Glove, 1) -- End touch
+                end
+            end
+            task.wait(0.1) -- Small delay to prevent crashes
+        end
+    end    
+})
+
+Two:AddToggle({
+    Name = "Auto Teleport Loop",
+    Default = false,
+    Callback = function(Value)
+        getgenv().TeleportLoop = Value -- Store toggle state
+
+        local Players = game:GetService("Players")
+        local LocalPlayer = Players.LocalPlayer
+        local Workspace = game:GetService("Workspace")
+
+        while getgenv().TeleportLoop do
+            local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+            local HumanoidRootPart = Character:FindFirstChild("HumanoidRootPart")
+            local Humanoid = Character:FindFirstChild("Humanoid")
+
+            if HumanoidRootPart and Humanoid then
+                -- Step 1: Teleport to the lobby
+                local LobbyTeleport = Workspace:FindFirstChild("Lobby") and Workspace.Lobby:FindFirstChild("Teleport1")
+                if LobbyTeleport then
+                    HumanoidRootPart.CFrame = LobbyTeleport.CFrame
+                end
+
+                task.wait(0.2) -- Small delay before next teleport
+
+                -- Step 2: Teleport to specific coordinates (-12874, 1162, 537)
+                HumanoidRootPart.CFrame = CFrame.new(-12874, 1162, 537)
+
+                task.wait(0.2) -- Small delay before moving to the turret
+
+                -- Step 3: Find and teleport to any Glove part inside a Turret
+                for _, turret in pairs(Workspace:GetChildren()) do
+                    local Glove = turret:FindFirstChild("HingePart") and turret.HingePart:FindFirstChild("Glove")
+                    if Glove then
+                        HumanoidRootPart.CFrame = Glove.CFrame
+                        
+                        -- Step 4: Simulate touch event
+                        task.wait(0.5)
+                        firetouchinterest(HumanoidRootPart, Glove, 0) -- Start touch
+                        task.wait(0.5)
+                        firetouchinterest(HumanoidRootPart, Glove, 1) -- End touch
+                        
+                        -- Step 5: Reset the character properly
+                        Humanoid.Health = 0 -- This will instantly kill/reset the character
+
+                        break -- Stop searching for more turrets once one is found
+                    end
+                end
+            end
+
+            task.wait(4) -- Delay before restarting the loop
+        end
+    end
+})
+
+Two:AddToggle({
+    Name = "Redacted",
+    Default = false,
+    Callback = function(Value)
+        getgenv().Fort = Value
+        
+        while getgenv().Fort do
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+            local humanoid = character:FindFirstChild("Humanoid")
+
+            local teleport1 = game:GetService("Workspace").Lobby:FindFirstChild("Teleport2")
+            local redacted = game:GetService("Workspace").WellModel.Paticle
+
+            -- Move Lobby.Teleport2 to the player's position
+            if teleport1 and humanoidRootPart then
+                teleport1.CFrame = humanoidRootPart.CFrame
+            end
+
+            task.wait(1) -- Wait before next step
+
+            -- Move player to WellModel.Hitbox
+            if humanoidRootPart and redacted then
+                humanoidRootPart.CFrame = redacted.CFrame
+            end
+
+            task.wait(3)--Wait before setting health
+
+            -- Set health to 0 to "kill" the player
+            if humanoid then
+                humanoid.Health = 0
+            end
+
+            task.wait(5)--revent excessive looping
+        end
+    end
+})
+
 
 local Four = Window:MakeTab({
 	Name = "Teleports",
@@ -1257,13 +1389,6 @@ Four:AddButton({
 	end
 })
 
-Four:AddButton({
-	Name = "TOH",
-	Callback = function()
-		game:GetService('TeleportService'):Teleport(115782629143468, LocalPlayer)
-	end
-})
-
 Four:AddDropdown({
 	Name = "Retro Obby",
 	Default = "",
@@ -1300,27 +1425,3 @@ Four:AddDropdown({
 		end
 	end
 })
-
-Four:AddButton({
-	Name = "Safe spot",
-	Callback = function()
-        local platform = Instance.new("Part")
-        platform.Anchored = true
-        platform.Size = Vector3.new(1000, 10, 1000)
-        platform.CFrame = CFrame.new(-4144, 3895, -12433)
-        platform.BrickColor = BrickColor.new("Red")
-        platform.Parent = game:GetService("Workspace")
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-4144, 3915, -12433)
-  	end    
-})
-
-
-
---[[
-Tab:AddButton({
-	Name = "Button!",
-	Callback = function()
-      		print("button pressed")
-  	end    
-})
-]]
