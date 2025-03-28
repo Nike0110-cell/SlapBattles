@@ -1334,6 +1334,60 @@ Two:AddToggle({
 })
 
 
+Two:AddToggle({
+    Name = "Killstreak",
+    Default = false,
+    Callback = function(Value)
+        getgenv().Fort = Value
+        
+        while getgenv().Fort do
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+            local humanoid = character:FindFirstChild("Humanoid")
+
+            local teleport1 = game:GetService("Workspace").Lobby:FindFirstChild("Teleport2")
+            local KillstreakGlove = game:GetService("Workspace")["0_34b"].Killstreak:FindFirstChild("Glove")
+
+            -- Move Lobby.Teleport2 to the player's position
+            if teleport1 and humanoidRootPart then
+                teleport1.CFrame = humanoidRootPart.CFrame
+            end
+
+            task.wait(1) -- Short delay
+
+            -- Move player to Killstreak.Glove
+            if humanoidRootPart and KillstreakGlove then
+                humanoidRootPart.CFrame = KillstreakGlove.CFrame
+            end
+
+            task.wait(1) -- Shorter wait time for smoother execution
+
+            -- Set health to 0 (kill player)
+            if humanoid then
+                humanoid.Health = 0
+            end
+
+            task.wait(4.7) -- Prevent excessive looping
+        end
+    end
+})
+
+Two:AddToggle({
+    Name = "Flash",
+    Default = false,
+    Callback = function(Value)
+        getgenv().FlashActive = Value
+
+        while getgenv().FlashActive do
+            task.wait(6) -- Wait 5 seconds before activating again
+            game:GetService("ReplicatedStorage"):WaitForChild("FlashTeleport"):FireServer()
+        end
+    end
+})
+
+
+
 local Four = Window:MakeTab({
 	Name = "Teleports",
 	Icon = "rbxassetid://4483345998",
@@ -1424,4 +1478,28 @@ Four:AddDropdown({
 			end
 		end
 	end
+})
+
+Four:AddButton({
+	Name = "Safe spot",
+	Callback = function()
+		local platform = Instance.new("Part")
+platform.Size = Vector3.new(150, 5, 150) -- Significantly larger platform
+platform.Position = Vector3.new(-13197, 1198, -593)
+platform.Anchored = true
+platform.Material = Enum.Material.SmoothPlastic
+platform.BrickColor = BrickColor.new("Gray")
+platform.Parent = game.Workspace
+
+-- Teleport player
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+
+if humanoidRootPart then
+    humanoidRootPart.CFrame = platform.CFrame + Vector3.new(0, 10, 0) -- Moves player slightly above the platform
+end
+
+
+  	end    
 })
