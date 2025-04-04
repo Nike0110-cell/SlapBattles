@@ -1386,7 +1386,6 @@ Two:AddToggle({
     end
 })
 
-
 Two:AddToggle({
     Name = "Booster",
     Default = false,
@@ -1406,13 +1405,12 @@ Two:AddToggle({
                 humanoidRootPart.CFrame = KillstreakGlove.CFrame
             end
 
-            task.wait() -- Shorter wait time for smoother execution
+            task.wait(0) -- Shorter wait time for smoother execution
 
             
         end
     end
 })
-
 
 local Four = Window:MakeTab({
 	Name = "Teleports",
