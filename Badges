@@ -1373,8 +1373,6 @@ Two:AddToggle({
     end
 })
 
-
-
 Two:AddToggle({
     Name = "Flash",
     Default = false,
@@ -1389,7 +1387,7 @@ Two:AddToggle({
 })
 
 Two:AddToggle({
-    Name = "Tp Flash",
+    Name = "Booster",
     Default = false,
     Callback = function(Value)
         getgenv().Fort = Value
@@ -1400,15 +1398,16 @@ Two:AddToggle({
             local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
             local humanoid = character:FindFirstChild("Humanoid")
 
-            local KillstreakGlove = game:GetService("Workspace")["0_34b"].Flash:FindFirstChild("Glove")
-
-            task.wait() -- Short delay
+            local KillstreakGlove = game:GetService("Workspace")["0_34b"].Booster:FindFirstChild("Glove")
 
             -- Move player to Killstreak.Glove
             if humanoidRootPart and KillstreakGlove then
                 humanoidRootPart.CFrame = KillstreakGlove.CFrame
             end
 
+            task.wait(1) -- Shorter wait time for smoother execution
+
+            
         end
     end
 })
