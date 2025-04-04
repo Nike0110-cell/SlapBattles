@@ -1405,7 +1405,7 @@ Two:AddToggle({
                 humanoidRootPart.CFrame = KillstreakGlove.CFrame
             end
 
-            task.wait(1) -- Shorter wait time for smoother execution
+            task.wait(0) -- Shorter wait time for smoother execution
 
             
         end
